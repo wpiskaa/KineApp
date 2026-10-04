@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function profile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function active() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && profile().active == true;
+    }
+    function leader() { return active() && profile().role in ['kadiv', 'wakadiv']; }
+    function isBPH()  { return leader() && profile().div == 'BPH'; }
+    function validDiv(d) { return d in ['BPH','MEDIA','APRESIASI','ASSET','PRODUKSI','HUMAS','PSDM']; }
+
+    // Profil pengguna: hanya dibuat/diubah/dihapus oleh BPH.
+    match /users/{uid} {
+      allow get: if request.auth != null && (request.auth.uid == uid || isBPH());
+      allow list: if isBPH();
+      allow create, update: if isBPH()
+        && request.resource.data.role in ['anggota','wakadiv','kadiv']
+        && validDiv(request.resource.data.div);
+      allow delete: if isBPH();
+    }
+
+    // Agenda: semua anggota aktif boleh baca; tulis hanya kadiv/wakadiv sesuai divisi (BPH: semua).
+    match /events/{id} {
+      allow read: if active();
+      allow create: if validDiv(request.resource.data.div)
+        && (isBPH() || (leader() && request.resource.data.div == profile().div));
+      allow update: if validDiv(request.resource.data.div)
+        && (isBPH() || (leader() && resource.data.div == profile().div
+                        && request.resource.data.div == profile().div));
+      allow delete: if isBPH() || (leader() && resource.data.div == profile().div);
+    }
+  }
+}

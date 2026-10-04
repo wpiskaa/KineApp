@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kine Klub – Kalender & Manajemen UKM MM Kine Klub UMY</title>
+  <meta name="description" content="Kalender agenda terpusat UKM Multimedia Kine Klub UMY. Semua divisi terhubung: BPH, Media, Apresiasi, Asset, Produksi, Humas, dan PSDM.">
+  <meta name="theme-color" content="#0b0b0c">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app" class="app">
+    <aside id="rail" class="rail" aria-label="Navigasi utama"></aside>
+    <div class="main">
+      <header id="topbar" class="topbar"></header>
+      <main id="view" class="view" tabindex="-1"></main>
+    </div>
+    <nav id="dock" class="dock" aria-label="Navigasi bawah"></nav>
+  </div>
+
+  <div id="sheet-root"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
